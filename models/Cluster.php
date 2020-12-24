@@ -163,7 +163,6 @@ class Cluster extends Model
     public function afterSave()
     {
         $plan = $this->plan()->first();
-
         if ($plan && $plan->features) {
             $features = (array) $plan->features;
             $this->refreshRegisteredFeatures($features);
@@ -261,7 +260,7 @@ class Cluster extends Model
     {
         $featureLogs = ClusterFeatureLog::clusterFiltered($this->slug)->get()->groupBy('feature_code');
         $features = [];
-
+        
         foreach ($featureLogs as $feature_code => $group) {
             $newestElement = $group->sortByDesc('timestamp')->first();
             if ($newestElement->action === 'registered') {
@@ -293,7 +292,6 @@ class Cluster extends Model
     public function refreshRegisteredFeatures(array $features)
     {
         $currentRegisteredFeatures = $this->registered_features;
-
         $featuresToRegister = array_diff($features, $currentRegisteredFeatures);
         $featuresToDeregister = array_diff($currentRegisteredFeatures, $features);
 
