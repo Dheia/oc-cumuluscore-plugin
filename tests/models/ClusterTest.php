@@ -2,18 +2,24 @@
 
 namespace Initbiz\CumulusCore\Tests\Models;
 
+use Initbiz\CumulusCore\Models\Plan;
 use Initbiz\CumulusCore\Models\Cluster;
 use Initbiz\Cumuluscore\Models\ClusterFeatureLog;
-use Initbiz\CumulusCore\Models\Plan;
-use PluginTestCase;
+use Initbiz\InitDry\Tests\Classes\FullPluginTestCase;
 
-class ClusterTest extends PluginTestCase
+class ClusterTest extends FullPluginTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
+
     public function testCanEnterFeature()
     {
         $this->assertTrue(true);
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug= 'testowy';
         $cluster->save();
 
         $plan = new Plan;
@@ -38,6 +44,7 @@ class ClusterTest extends PluginTestCase
         $this->assertTrue(true);
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $plan = new Plan;
@@ -61,6 +68,7 @@ class ClusterTest extends PluginTestCase
     {
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $plan = new Plan;
@@ -91,6 +99,7 @@ class ClusterTest extends PluginTestCase
     {
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $plan = new Plan;
@@ -133,6 +142,7 @@ class ClusterTest extends PluginTestCase
     {
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $plan = new Plan;
@@ -179,11 +189,12 @@ class ClusterTest extends PluginTestCase
         ], $cluster->registered_features);
         $this->assertEquals(['initbiz.cumulusdemo.basic.dashboard'], $cluster->registered_features);
     }
-    
+
     public function testRefreshRegisteredFunctions()
     {
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $plan = new Plan;
@@ -231,11 +242,12 @@ class ClusterTest extends PluginTestCase
     {
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $cluster->registerFeature('initbiz.cumulusdemo.basic.dashboard');
         $log = ClusterFeatureLog::where('cluster_slug', 'testowy')->where('feature_code', 'initbiz.cumulusdemo.basic.dashboard')->first();
-        
+
         $this->assertEquals('registered', $log->action);
     }
 
@@ -243,17 +255,18 @@ class ClusterTest extends PluginTestCase
     {
         $cluster = new Cluster;
         $cluster->name = 'testowy';
+        $cluster->slug = 'testowy';
         $cluster->save();
 
         $cluster->registerFeature('initbiz.cumulusdemo.basic.dashboard');
         $log = ClusterFeatureLog::where('cluster_slug', 'testowy')->where('feature_code', 'initbiz.cumulusdemo.basic.dashboard')->first();
-        
+
         $this->assertEquals('registered', $log->action);
         sleep(1);
-    
+
         $cluster->deregisterFeature('initbiz.cumulusdemo.basic.dashboard');
         $log = ClusterFeatureLog::where('cluster_slug', 'testowy')->where('feature_code', 'initbiz.cumulusdemo.basic.dashboard')->orderBy('timestamp', 'desc')->first();
 
         $this->assertEquals('deregistered', $log->action);
-    }    
+    }
 }
